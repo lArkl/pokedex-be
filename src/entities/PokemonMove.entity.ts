@@ -1,0 +1,14 @@
+import { Entity, Column, PrimaryColumn, ManyToMany } from 'typeorm'
+import { Pokemon } from './Pokemon.entity'
+
+@Entity()
+export class PokemonMove {
+  @PrimaryColumn()
+  id: number
+
+  @Column()
+  name: string
+
+  @ManyToMany(() => Pokemon, (pokemon: Pokemon) => pokemon.moves)
+  pokemons: Pokemon[]
+}
