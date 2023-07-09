@@ -1,0 +1,5 @@
+export * from './Pokemon.entity'
+export * from './PokemonAbility.entity'
+export * from './PokemonMove.entity'
+export * from './PokemonSprite.entity'
+export * from './PokemonType.entity'

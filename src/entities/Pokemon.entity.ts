@@ -9,7 +9,7 @@ export class Pokemon {
   @PrimaryColumn()
   id: number
 
-  @Column()
+  @Column({ unique: true })
   name: string
 
   @Column('float')
@@ -26,6 +26,9 @@ export class Pokemon {
 
   @Column()
   defense: number
+
+  @Column({ nullable: true, type: 'text' })
+  mainSprite: string | null
 
   @Column()
   specialAttack: number

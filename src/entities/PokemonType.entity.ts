@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryColumn, ManyToMany } from 'typeorm'
+import { Entity, Column, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Pokemon } from './Pokemon.entity'
 
 @Entity()
 export class PokemonType {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number
 
   @Column()

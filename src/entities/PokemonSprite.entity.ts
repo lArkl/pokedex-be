@@ -1,13 +1,13 @@
-import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm'
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Pokemon } from './Pokemon.entity'
 
 @Entity()
 export class PokemonSprite {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number
 
   @Column()
-  category: string
+  category: number
 
   @Column()
   frontUrl: string
