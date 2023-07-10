@@ -5,7 +5,7 @@ export const AppDataSource = new DataSource({
   type: 'better-sqlite3',
   database: './main.sqlite3',
   synchronize: true,
-  logging: true,
+  logging: false,
   entities: [Pokemon, PokemonAbility, PokemonMove, PokemonSprite, PokemonType],
   subscribers: [],
   migrations: [],

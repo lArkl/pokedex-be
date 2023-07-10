@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, JoinTable, ManyToMany, OneToMany } from 
 import { PokemonSprite } from './PokemonSprite.entity'
 import { PokemonAbility } from './PokemonAbility.entity'
 import { PokemonMove } from './PokemonMove.entity'
-import { PokemonType } from './PokemonTypes'
+import { PokemonType } from './PokemonType.entity'
 
 @Entity()
 export class Pokemon {
