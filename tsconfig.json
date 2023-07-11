@@ -4,6 +4,7 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "sourceMap": true,
+    "resolveJsonModule": true,
     "outDir": "dist",
     "strict": true,
     "lib": ["esnext"],
