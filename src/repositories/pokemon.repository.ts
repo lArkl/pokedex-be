@@ -1,6 +1,8 @@
 import { AppDataSource } from '../db'
+import { PokemonsEntityDto } from '../dto/Pokemon.dto'
 import { Pokemon } from '../entities/Pokemon.entity'
 import { BasePokemon } from '../source/getPokemons'
+import { getPaginationParams } from './utils'
 
 export const createPokemon = async (basePokemon: BasePokemon): Promise<Pokemon> => {
   const pokemon = new Pokemon()
@@ -21,20 +23,13 @@ export const createPokemon = async (basePokemon: BasePokemon): Promise<Pokemon> 
   return pokemon
 }
 
-type PokemonsSelectParams = Partial<{
-  pokemonName: string
-  pokemonTypeIds: number[]
-  pokemonAbilityIds: number[]
-  pokemonMoveIds: number[]
-}>
+export const queryPokemons = async (params: PokemonsEntityDto): Promise<[Pokemon[], number]> => {
+  const { pokemonName, pokemonAbilityIds, pokemonTypeIds, pokemonMoveIds, page, pageSize } = params
+  const { skip, take } = getPaginationParams(page, pageSize)
 
-export const queryPokemons = async (
-  page: number,
-  pageSize: number,
-  params: PokemonsSelectParams = {},
-): Promise<Pokemon[]> => {
-  let query = AppDataSource.getRepository(Pokemon).createQueryBuilder('pokemon')
-  const { pokemonName, pokemonAbilityIds, pokemonTypeIds, pokemonMoveIds } = params
+  let query = AppDataSource.getRepository(Pokemon)
+    .createQueryBuilder('pokemon')
+    .leftJoin('pokemon.types', 'pokemonType')
 
   if (pokemonName) {
     query = query.andWhere('instr(pokemon.name,:pokemonName)', { pokemonName })
@@ -56,11 +51,10 @@ export const queryPokemons = async (
   }
 
   return query
-    .leftJoinAndSelect('pokemon.types', 'pokemonType')
-    .select(['pokemon.id', 'pokemon.name', 'pokemonType'])
-    .take(pageSize)
-    .skip(page * pageSize)
-    .getMany()
+    .select(['pokemon.id', 'pokemon.name', 'pokemon.mainSprite', 'pokemonType'])
+    .take(take)
+    .skip(skip)
+    .getManyAndCount()
 }
 
 export const queryPokemon = async (id: number): Promise<Pokemon | null> => {

@@ -7,6 +7,7 @@
     "scrape": "ts-node-dev src/source/scrape.ts",
     "dev": "ts-node-dev --respawn src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
+    "type-check": "tsc --noEmit -skipLibCheck && echo 'PASSED'",
     "test": "vitest"
   },
   "keywords": [],
@@ -32,6 +33,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "zod": "^3.21.4"
   }
 }

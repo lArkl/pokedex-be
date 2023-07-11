@@ -1,13 +1,7 @@
+import { PokemonOutputDto, PokemonsEntityDto } from '../dto/Pokemon.dto'
+import { PaginationDto } from '../dto/Response.dto'
 import { SpriteCategory } from '../entities/constants'
-import {
-  queryPokemons,
-  queryPokemonAbilities,
-  queryPokemonMoves,
-  queryPokemonSprites,
-  queryPokemonTypes,
-  queryPokemon,
-  queryPokemonType,
-} from '../repositories'
+import { queryPokemons, queryPokemon } from '../repositories'
 
 export const getPokemon = async (id: number) => {
   return queryPokemon(id).then((pokemon) => {
@@ -40,32 +34,15 @@ export const getPokemon = async (id: number) => {
   })
 }
 
-type PokemonsSelectParams = Partial<{
-  pokemonName: string
-  pokemonTypeIds: number[]
-  pokemonAbilityIds: number[]
-  pokemonMoveIds: number[]
-}>
-export const getPokemons = async (page: number, pageSize: number, params?: PokemonsSelectParams) => {
-  return queryPokemons(page, pageSize, params)
+export const getPokemons = async (
+  params: PokemonsEntityDto,
+): Promise<Omit<PaginationDto<PokemonOutputDto>, 'pageSize' | 'page'>> => {
+  const [pokemonList, count] = await queryPokemons(params)
+  const { pageSize } = params
+  const totalPages = Math.ceil(count / pageSize)
+  return {
+    items: pokemonList.map(({ id, name, mainSprite, types }) => ({ id, name, spriteUrl: mainSprite, types })),
+    count,
+    totalPages,
+  }
 }
-
-// export const getPokemonSprites = async (page = 0, pageSize) => {
-//   return queryPokemonSprites(page, pageSize)
-// }
-
-// export const getPokemonMoves = async (page = 0, pageSize) => {
-//   return queryPokemonMoves(page, pageSize)
-// }
-
-export const getPokemonTypes = async () => {
-  return queryPokemonTypes()
-}
-
-export const getPokemonType = async (id: number) => {
-  return queryPokemonType(id)
-}
-
-// export const getPokemonAbilities = async (page = 0, pageSize) => {
-//   return queryPokemonAbilities(page, pageSize)
-// }
