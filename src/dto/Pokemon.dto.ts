@@ -15,3 +15,9 @@ export type PokemonOutputDto = {
   spriteUrl: string | null
   types: PokemonType[]
 }
+
+export type ListEntityDto = {
+  name?: string
+  page: number
+  pageSize: number
+}

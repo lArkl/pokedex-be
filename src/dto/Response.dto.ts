@@ -1,7 +1,6 @@
 export interface PaginationDto<T> {
   items: T[]
   count: number
-  totalPages: number
   page: number
   pageSize: number
 }
@@ -12,3 +11,8 @@ export interface ResponseDto<T> {
 }
 
 export type PaginatedResponseDto<T> = ResponseDto<PaginationDto<T>>
+
+export type ListItemOutpuDto = {
+  id: number
+  name: string
+}

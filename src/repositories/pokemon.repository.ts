@@ -40,9 +40,7 @@ export const queryPokemons = async (params: PokemonsEntityDto): Promise<[Pokemon
       .andWhere('pokemonAbility.id IN (:...pokemonAbilityIds)', { pokemonAbilityIds })
   }
   if (pokemonTypeIds) {
-    query = query
-      .leftJoin('pokemon.types', 'pokemonType')
-      .andWhere('pokemonType.id IN (:...pokemonTypeIds)', { pokemonTypeIds })
+    query = query.andWhere('pokemonType.id IN (:...pokemonTypeIds)', { pokemonTypeIds })
   }
   if (pokemonMoveIds) {
     query = query
