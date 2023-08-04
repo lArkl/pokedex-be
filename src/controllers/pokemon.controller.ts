@@ -54,8 +54,9 @@ export const getPokemonAbilities = async ({
   page,
   pageSize,
   name,
+  ids,
 }: ListEntityDto): Promise<PaginationDto<ListItemOutpuDto>> => {
-  const [pokemonAbilities, count] = await queryPokemonAbilities({ page, pageSize, name })
+  const [pokemonAbilities, count] = await queryPokemonAbilities({ page, pageSize, name, ids })
   return {
     items: pokemonAbilities,
     count,

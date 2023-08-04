@@ -64,9 +64,9 @@ router.get('/types', async (req, res, next) => {
 router.get('/abilities', async (req, res, next) => {
   try {
     const {
-      query: { page, pageSize, name },
+      query: { page, pageSize, name, ids },
     } = await zParse(abilitiesSchema, req)
-    const { count, items } = await getPokemonAbilities({ page, pageSize, name })
+    const { count, items } = await getPokemonAbilities({ page, pageSize, name, ids })
     const response: PaginatedResponseDto<ListItemOutpuDto> = {
       data: {
         items,

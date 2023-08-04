@@ -26,6 +26,7 @@ export const typesSchema = z.object({
 export const abilitiesSchema = z.object({
   query: z.object({
     name: z.string().optional(),
+    ids: z.coerce.number().int().array().optional(),
     page: z.coerce.number().int().optional().default(1),
     pageSize: z.coerce.number().int().optional().default(20),
   }),

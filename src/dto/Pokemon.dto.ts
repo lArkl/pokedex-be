@@ -17,6 +17,7 @@ export type PokemonOutputDto = {
 }
 
 export type ListEntityDto = {
+  ids?: number[]
   name?: string
   page: number
   pageSize: number
