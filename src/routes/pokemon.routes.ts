@@ -44,6 +44,7 @@ router.get('/pokemons', async (req, res, next) => {
     }
     return res.json(response)
   } catch (err) {
+    console.error(err)
     next(err)
   }
 })
