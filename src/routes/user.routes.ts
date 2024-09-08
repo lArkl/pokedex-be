@@ -1,31 +1,20 @@
 import { Router } from 'express'
 import { ResponseDto } from '../dto/Response.dto'
-import { createUserSchema, signUserSchema, zParse } from '../validators'
-import { signInUser, signUpUser, validateUser } from '../controllers/user.controller'
+import { createUserSchema, zParse } from '../validators'
+import { getUserInfoById, signUpUser } from '../controllers/user.controller'
+import { accessTokenMiddleware } from '../middlewares/auth'
 
 const router = Router()
 
-router.post('/signin', async (req, res, next) => {
+router.get('/info', accessTokenMiddleware, async (req, res, next) => {
   try {
-    const { body } = await zParse(signUserSchema, req)
-    const user = await signInUser(body)
-    const response: ResponseDto<typeof user> = { data: user, error: null }
-    res.json(response)
-  } catch (err) {
-    next(err)
-  }
-})
+    const user = await getUserInfoById(req.userId ?? 0)
 
-router.get('/validate', async (req, res, next) => {
-  try {
-    const { authorization } = req.headers
-    if (authorization) {
-      const token = authorization.split(' ')[1]
-      const user = await validateUser(token)
-      const response: ResponseDto<typeof user> = { data: user, error: null }
-      return res.json(response)
+    const response: ResponseDto<{ firstname: string; lastname: string; email: string; expiration: string }> = {
+      data: { ...user, expiration: req.expiration ?? '' },
+      error: null,
     }
-    return res.status(400).json({ data: null, error: { message: 'Not authorized user' } })
+    return res.json(response)
   } catch (err) {
     next(err)
   }

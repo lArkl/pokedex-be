@@ -1,22 +1,14 @@
 import bcrypt from 'bcrypt'
-import jsonwebtoken from 'jsonwebtoken'
+import envConfig from '../envConfig'
 import { createUser, getUserByEmail, getUserById } from '../repositories/user.repository'
-import { config } from 'dotenv'
-config()
+import { AuthUserError } from '../utils/errors'
 
-const secret = process.env.EXPRESS_SECRET ?? 'secret'
-
-export const createJWT = (id: number): string => {
-  return jsonwebtoken.sign({ id }, secret)
-}
-
-const saltRounds = 12
 export const signUpUser = async (params: { firstname: string; lastname: string; password: string; email: string }) => {
   const user = await getUserByEmail(params.email)
   if (user) {
-    throw Error(`User with email ${params.email} already exists`)
+    throw new AuthUserError(`User already exists`)
   }
-  const password = await bcrypt.hash(params.password, saltRounds)
+  const password = await bcrypt.hash(params.password, envConfig.SALT_ROUNDS)
   const newUser = await createUser({ ...params, password })
 
   return {
@@ -27,40 +19,24 @@ export const signUpUser = async (params: { firstname: string; lastname: string; 
   }
 }
 
-export const signInUser = async (params: { password: string; email: string }) => {
+export const getValidUserIdByCredentials = async (params: { password: string; email: string }) => {
   const user = await getUserByEmail(params.email)
   if (!user) {
-    throw Error('Wrong credentials')
+    throw new AuthUserError('No user with that email exists')
   }
   const success = await bcrypt.compare(params.password, user.password)
-  if (success) {
-    const token = createJWT(user.id)
-    return {
-      firstname: user.firstname,
-      lastname: user.lastname,
-      id: user.id,
-      updatedAt: user.updatedAt,
-      token,
-    }
+
+  if (!success) {
+    throw new AuthUserError('Wrong credentials')
   }
-  throw Error('Wrong credentials')
+  return user.id
 }
 
-export const validateUser = async (token: string) => {
-  try {
-    const data = jsonwebtoken.verify(token, secret) as { id: number }
-    const user = await getUserById(data.id)
-    if (!user) {
-      throw Error
-    }
-    return {
-      firstname: user.firstname,
-      lastname: user.lastname,
-      id: user.id,
-      updatedAt: user.updatedAt,
-      token,
-    }
-  } catch (err) {
-    throw Error('Invalid token')
+export const getUserInfoById = async (userId: number) => {
+  const user = await getUserById(userId)
+  if (!user) {
+    throw new AuthUserError('No user with that email exists')
   }
+  const { firstname, lastname, email } = user
+  return { firstname, lastname, email }
 }

@@ -1,19 +1,20 @@
 import express from 'express'
 import 'reflect-metadata'
 import cors from 'cors'
-import { pokemonRoutes, userRoutes } from './routes'
+import cookieParser from 'cookie-parser'
+import { authRoutes, pokemonRoutes, userRoutes } from './routes'
 import ErrorHandler from './middlewares/error.handler'
+import envConfig from './envConfig'
 
 const app = express()
+app.listen(envConfig.PORT)
+console.log(`Server runing on port ${envConfig.PORT}`)
 
-const PORT = 4000
-
-app.listen(PORT)
-console.log(`Server runing on port ${PORT}`)
-
-app.use(cors())
+app.use(cookieParser())
+app.use(cors({ credentials: true, origin: envConfig.CLIENT_URL }))
 app.use(express.json())
 app.use(pokemonRoutes)
 app.use('/users', userRoutes)
+app.use('/auth', authRoutes)
 
 app.use(ErrorHandler)

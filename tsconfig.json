@@ -8,6 +8,7 @@
     "outDir": "dist",
     "strict": true,
     "lib": ["esnext"],
+    "typeRoots": ["./src/types"],
     "esModuleInterop": true
   },
   "include": ["src"]

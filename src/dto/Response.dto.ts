@@ -7,7 +7,7 @@ export interface PaginationDto<T> {
 
 export interface ResponseDto<T> {
   data: T
-  error: null | { message: string; stack: unknown }
+  error: null | { message: string; stack: unknown; name: string }
 }
 
 export type PaginatedResponseDto<T> = ResponseDto<PaginationDto<T>>
