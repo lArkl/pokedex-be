@@ -12,9 +12,6 @@ export const createUserSchema = z.object({
 })
 
 export const updateUserSchema = z.object({
-  params: z.object({
-    id: z.coerce.number().int(),
-  }),
   body: userSchemaobject.partial(),
 })
 

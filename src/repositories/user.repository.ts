@@ -22,3 +22,17 @@ export const createUser = async (baseUser: {
   user.password = baseUser.password
   return AppDataSource.manager.save(user)
 }
+
+export const updateUser = async (
+  user: User,
+  newFields: {
+    firstname: string
+    email: string
+    lastname: string
+  },
+) => {
+  user.firstname = newFields.firstname
+  user.lastname = newFields.lastname
+  user.email = newFields.email
+  return AppDataSource.manager.save(user)
+}

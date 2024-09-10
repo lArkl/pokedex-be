@@ -14,7 +14,7 @@ app.use(cookieParser())
 app.use(cors({ credentials: true, origin: envConfig.CLIENT_URL }))
 app.use(express.json())
 app.use(pokemonRoutes)
-app.use('/users', userRoutes)
+app.use('/user', userRoutes)
 app.use('/auth', authRoutes)
 
 app.use(ErrorHandler)

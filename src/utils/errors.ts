@@ -1,5 +1,5 @@
 class GeneralError extends Error {
-  statusCode: number
+  statusCode = 400
   constructor(msg: string) {
     super(msg)
   }
@@ -17,7 +17,6 @@ export class RefreshTokenError extends GeneralError {
   constructor(msg: string) {
     super(msg)
     this.name = 'RefreshTokenError'
-    this.statusCode = 400
   }
 }
 
@@ -25,6 +24,5 @@ export class AuthUserError extends GeneralError {
   constructor(msg: string) {
     super(msg)
     this.name = 'AuthUserError'
-    this.statusCode = 400
   }
 }

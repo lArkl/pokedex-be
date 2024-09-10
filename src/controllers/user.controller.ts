@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import envConfig from '../envConfig'
-import { createUser, getUserByEmail, getUserById } from '../repositories/user.repository'
+import { createUser, getUserByEmail, getUserById, updateUser } from '../repositories/user.repository'
 import { AuthUserError } from '../utils/errors'
 
 export const signUpUser = async (params: { firstname: string; lastname: string; password: string; email: string }) => {
@@ -35,8 +35,24 @@ export const getValidUserIdByCredentials = async (params: { password: string; em
 export const getUserInfoById = async (userId: number) => {
   const user = await getUserById(userId)
   if (!user) {
-    throw new AuthUserError('No user with that email exists')
+    throw new AuthUserError('No user found')
   }
   const { firstname, lastname, email } = user
   return { firstname, lastname, email }
+}
+
+export const updateUserProfile = async (
+  userId: number,
+  fields: Partial<{ firstname: string; lastname: string; email: string }>,
+) => {
+  const user = await getUserById(userId)
+  if (!user) {
+    throw new AuthUserError('No user found')
+  }
+  const updatedFields = {
+    firstname: fields.firstname ?? user.firstname,
+    lastname: fields.lastname ?? user.lastname,
+    email: fields.email ?? user.email,
+  }
+  return updateUser(user, updatedFields)
 }
